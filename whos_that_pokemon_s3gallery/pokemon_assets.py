@@ -1,9 +1,45 @@
+import os
+
 import pokepy
 
 from multiprocessing import Pool
 
 import whos_that_pokemon_s3gallery.util
-from whos_that_pokemon_s3gallery import config
+import whos_that_pokemon_s3gallery.s3
+from whos_that_pokemon_s3gallery import config, s3_bucket
+
+output_dir = "./img/"
+original_image_suffix = "-orig"
+saved_file_type = ".png"
+
+
+def upload_all_pokemon_img() -> None:
+    """Uploads all the pokemon images to S3
+
+    Returns:
+        None
+    """
+    whos_that_pokemon_s3gallery.s3.upload_folder_to_s3(output_dir, s3_bucket)
+
+
+def create_silhouette_versions(orig_img_dir: str = "./img/"):
+    """Creates silhouette versions of the pokemon images
+
+    Args:
+        orig_img_dir: The directory where the original pokemon images live in
+
+    Returns:
+
+    """
+    directory = os.fsencode(orig_img_dir)
+
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        if filename.endswith(f"{original_image_suffix}{saved_file_type}"):
+            print(os.path.join(directory, filename))
+            continue
+        else:
+            continue
 
 
 def download_all_pokemon_img() -> None:
@@ -24,7 +60,7 @@ def download_img_from_pokemon_assets(pokemon_id: int):
     """
     pokemon_name = get_pokemon_name_from_id(pokemon_id)
     whos_that_pokemon_s3gallery.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
-                                                             get_pokemon_filename(pokemon_name))
+                                                             get_pokemon_filename(pokemon_name), output_dir)
 
 
 def get_pokemon_name_from_id(pokemon_id: int) -> str:
@@ -74,4 +110,5 @@ def get_pokemon_filename(pokemon_name: str):
     Args:
         pokemon_name: The pokemon's name
     """
-    return f"{pokemon_name}.png"
+    pokemon_name_before_hyphen = pokemon_name.split(':')[0]
+    return f"{pokemon_name}{original_image_suffix}{saved_file_type}"
