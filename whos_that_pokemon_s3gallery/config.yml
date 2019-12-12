@@ -1,2 +1,2 @@
 pokemon_assets_url: "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/"
-max_pokemon_id: 700
+max_pokemon_id: 807  # This is pretty much the number of pokemon in the pokeapi

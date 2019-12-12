@@ -1,3 +1,5 @@
+import pokepy
+
 from multiprocessing import Pool
 
 import whos_that_pokemon_s3gallery.util
@@ -10,18 +12,8 @@ def download_all_pokemon_img() -> None:
     Returns:
         None
     """
-    pool = Pool()
-    pool.map(download_img_from_pokemon_assets, all_pokemon_img)
-
-def all_pokemon_img():
-    """The generator function that is passed to the download_all_pokemon_img function
-    JOSH NOT  A GENERATOR YOU WANT A ITERABLE GOOGLE HOW TO MAKE AN INTERABLE
-    Returns:
-
-    """
-    for i in range(1, config["max_pokemon_id"] + 1):
-        yield i
-
+    pool = Pool()  # Creates a multiprocessing pool based on CPU's you have
+    pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
 
 def download_img_from_pokemon_assets(pokemon_id: int):
@@ -30,8 +22,21 @@ def download_img_from_pokemon_assets(pokemon_id: int):
     Args:
         pokemon_id: The pokemon's id
     """
+    pokemon_name = get_pokemon_name_from_id(pokemon_id)
     whos_that_pokemon_s3gallery.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
-                                                             get_pokemon_filename(str(pokemon_id)))
+                                                             get_pokemon_filename(pokemon_name))
+
+
+def get_pokemon_name_from_id(pokemon_id: int) -> str:
+    """Gets a pokemon's name from ID
+
+    Args:
+        pokemon_id: The pokemon's id from its pokedex id
+
+    Returns:
+        The pokemon's name as a string
+    """
+    return pokepy.V2Client().get_pokemon(pokemon_id).name
 
 
 def get_pokemon_assets_image_url(pokemon_id: int) -> str:
