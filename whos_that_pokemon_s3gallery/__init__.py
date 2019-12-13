@@ -4,7 +4,7 @@ import yaml
 
 module_dir = os.path.dirname(__file__)
 
-s3_bucket = os.getenv("S3_BUCKET")
+s3_bucket = os.environ["S3_BUCKET"]
 config = {}
 
 with open(f"{module_dir}/config.yml", 'r') as stream:

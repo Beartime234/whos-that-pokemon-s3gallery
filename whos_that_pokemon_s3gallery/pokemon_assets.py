@@ -1,15 +1,15 @@
-import os
+from multiprocessing import Pool
 
 import pokepy
 
-from multiprocessing import Pool
-
-import whos_that_pokemon_s3gallery.util
+import whos_that_pokemon_s3gallery.img_transform
 import whos_that_pokemon_s3gallery.s3
+import whos_that_pokemon_s3gallery.util
 from whos_that_pokemon_s3gallery import config, s3_bucket
 
 output_dir = "./img/"
 original_image_suffix = "-orig"
+silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
 
 
@@ -22,45 +22,33 @@ def upload_all_pokemon_img() -> None:
     whos_that_pokemon_s3gallery.s3.upload_folder_to_s3(output_dir, s3_bucket)
 
 
-def create_silhouette_versions(orig_img_dir: str = "./img/"):
-    """Creates silhouette versions of the pokemon images
-
-    Args:
-        orig_img_dir: The directory where the original pokemon images live in
-
-    Returns:
-
-    """
-    directory = os.fsencode(orig_img_dir)
-
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(f"{original_image_suffix}{saved_file_type}"):
-            print(os.path.join(directory, filename))
-            continue
-        else:
-            continue
-
-
 def download_all_pokemon_img() -> None:
     """Downloads all pokemon from the pokemon assets website
 
     Returns:
         None
     """
+    whos_that_pokemon_s3gallery.util.create_directory(output_dir)
     pool = Pool()  # Creates a multiprocessing pool based on CPU's you have
     pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
 
 def download_img_from_pokemon_assets(pokemon_id: int):
-    """Downloads the pokemon's image from the pokemon assets database
+    """Downloads the pokemon's image from the pokemon assets database. It will also create bw versions.
 
     Args:
         pokemon_id: The pokemon's id
     """
     pokemon_name = get_pokemon_name_from_id(pokemon_id)
+
+    orig_pokemon_filepath = get_pokemon_orig_filename(pokemon_name)
+    bw_pokemon_filepath = get_pokemon_silhouette_filepath(pokemon_name)
+
+    # Download the image
     whos_that_pokemon_s3gallery.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
-                                                             get_pokemon_filename(pokemon_name), output_dir)
+                                                             orig_pokemon_filepath)
+    # Create the silhouette img
+    whos_that_pokemon_s3gallery.img_transform.create_silhouette_of_img(orig_pokemon_filepath, bw_pokemon_filepath)
 
 
 def get_pokemon_name_from_id(pokemon_id: int) -> str:
@@ -72,7 +60,8 @@ def get_pokemon_name_from_id(pokemon_id: int) -> str:
     Returns:
         The pokemon's name as a string
     """
-    return pokepy.V2Client().get_pokemon(pokemon_id).name
+    pokemon_name = pokepy.V2Client().get_pokemon(pokemon_id).name
+    return pokemon_name.split(':')[0]  # This gets everything before the first hyphen as some of them
 
 
 def get_pokemon_assets_image_url(pokemon_id: int) -> str:
@@ -104,11 +93,22 @@ def pad_pokemon_id(pokemon_id: int) -> str:
     return f"{pokemon_id:03}"
 
 
-def get_pokemon_filename(pokemon_name: str):
-    """Creates the pokemon filename
+def get_pokemon_orig_filename(pokemon_name: str) -> str:
+    """Generates the pokemon orig path
 
     Args:
         pokemon_name: The pokemon's name
     """
-    pokemon_name_before_hyphen = pokemon_name.split(':')[0]
-    return f"{pokemon_name}{original_image_suffix}{saved_file_type}"
+    return f"{output_dir}{pokemon_name}{original_image_suffix}{saved_file_type}"
+
+
+def get_pokemon_silhouette_filepath(pokemon_name: str) -> str:
+    """Generates the pokemon silhouette path
+
+    Args:
+        pokemon_name: The pokemon's name
+
+    Returns:
+        A string with the pokemon's path
+    """
+    return f"{output_dir}{pokemon_name}{silhouette_image_suffix}{saved_file_type}"

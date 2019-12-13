@@ -1,0 +1,33 @@
+service: whos_that_pokemon_s3gallery
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  s3BucketName: whos-that-pokemon-s3gallery
+  pythonRequirements:
+    layer: true
+    dockerizePip: true
+
+provider:
+  name: aws
+  runtime: python3.8
+
+functions:
+  s3gallery_maker:
+    handler: whos_that_pokemon_s3gallery/handler.run
+    events:
+      - schedule: rate(90 days)
+    envionrment:
+      S3_BUCKET: ${self:custom.s3BucketName}
+
+resources:
+  Resources:
+    GalleryBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        Name: ${self:custom.s3BucketName}
+        VersioningConfiguration:
+          Status: Enabled
