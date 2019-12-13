@@ -18,16 +18,20 @@ def test_get_pokemon_image_url():
 
 
 def test_get_pokemon_orig_filename():
-    assert whos_that_pokemon_s3gallery.pokemon_assets.get_pokemon_orig_filename("bulbasaur") == f"{output_dir}bulbasaur-{original_image_suffix}{saved_file_type}"
+    assert whos_that_pokemon_s3gallery.pokemon_assets.get_pokemon_orig_filename("bulbasaur") == f"{output_dir}bulbasaur{original_image_suffix}{saved_file_type}"
 
 
 def test_get_pokemon_silhouette_filename():
-    assert whos_that_pokemon_s3gallery.pokemon_assets.get_pokemon_silhouette_filepath("bulbasaur") == f"{output_dir}bulbasaur-{original_image_suffix}{saved_file_type}"
+    assert whos_that_pokemon_s3gallery.pokemon_assets.get_pokemon_silhouette_filepath("bulbasaur") == f"{output_dir}bulbasaur{silhouette_image_suffix}{saved_file_type}"
 
 
 def test_get_pokemon_img():
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     whos_that_pokemon_s3gallery.pokemon_assets.download_img_from_pokemon_assets(1)
-    os.remove(f"{output_dir}bulbasaur.png")
+    os.remove(f"{output_dir}bulbasaur{original_image_suffix}{saved_file_type}")
+    os.remove(f"{output_dir}bulbasaur{silhouette_image_suffix}{saved_file_type}")
+    os.removedirs(output_dir)
 
 
 def test_download_all_pokemon_img():
@@ -35,7 +39,7 @@ def test_download_all_pokemon_img():
 
     # Checks that we downloaded the number of files = to max pokemon id
     assert len([f for f in os.listdir(output_dir)
-                if os.path.isfile(os.path.join(f"{output_dir}", f))]) == config["max_pokemon_id"]
+                if os.path.isfile(os.path.join(f"{output_dir}", f))]) == config["max_pokemon_id"] * 2
 
     # Removes all the pokemon downloaded
     test = os.listdir(output_dir)
