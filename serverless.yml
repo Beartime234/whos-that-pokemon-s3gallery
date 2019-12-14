@@ -6,7 +6,7 @@ plugins:
   - serverless-python-requirements
 
 custom:
-  s3BucketName: whos-that-pokemon-s3gallery
+  s3BucketName: whos-that-pokemon-gallery
   pythonRequirements:
     layer: true
     dockerizePip: true
