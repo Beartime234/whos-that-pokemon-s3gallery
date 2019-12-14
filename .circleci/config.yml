@@ -17,6 +17,9 @@ jobs:
 
     working_directory: ~/repo
 
+    environment:
+      S3_BUCKET: whos-that-pokemon-gallery
+
     steps:
       - checkout
 
@@ -43,7 +46,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python pytest tests
+            pytest tests
 
       - store_artifacts:
           path: test-reports
