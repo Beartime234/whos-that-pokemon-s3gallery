@@ -1,0 +1,25 @@
+{
+  "name": "whos-that-pokemon-s3gallery",
+  "version": "1.0.0",
+  "description": "Builds an S3 gallery of images for whos that pokemon",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Beartime234/whos-that-pokemon-s3gallery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Beartime234/whos-that-pokemon-s3gallery/issues"
+  },
+  "homepage": "https://github.com/Beartime234/whos-that-pokemon-s3gallery#readme",
+  "dependencies": {
+    "serverless-python-requirements": "^5.0.1"
+  }
+}

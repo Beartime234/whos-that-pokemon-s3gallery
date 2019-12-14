@@ -49,7 +49,7 @@ jobs:
             pytest tests
   deploy:
     docker:
-      - image: circleci/node:6.9
+      - image: circleci/node:8.10
 
     working_directory: ~/repo
 
