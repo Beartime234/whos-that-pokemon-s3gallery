@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -54,82 +54,95 @@ jobs:
 
       - store_artifacts:
           path: test-reports
-  deploy:
-    docker:
-      - image: nikolaik/python-nodejs:python3.8-nodejs8
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: Install Serverless CLI and dependencies
-          command: |
-            npm i -g serverless
-            npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-
-
-      - run:
-          name: Deploy application
-          command: sls deploy  -s prod
+#  deploy:
+#    docker:
+#      - image: nikolaik/python-nodejs:python3.8-nodejs8
+#
+#    working_directory: ~/repo
+#
+#    steps:
+#      - checkout
+#
+#      # Download and cache dependencies
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-
+#            # fallback to using the latest cache if no exact match is found
+#            - v1-dependencies-
+#
+#      - run:
+#          name: Install Serverless CLI and dependencies
+#          command: |
+#            npm i -g serverless
+#            npm install
+#
+#      - save_cache:
+#          paths:
+#            - node_modules
+#          key: v1-dependencies-
+#
+#      - run:
+#          name: Deploy application
+#          command: sls deploy  -s prod
 
   run:
     docker:
-      - image: circleci/node:8.10
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/python:3.8
 
-    working_directory: ~/repo
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
-    steps:
-      - checkout
+      working_directory: ~/repo
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      environment:
+        S3_BUCKET: whos-that-pokemon-gallery
 
-      - run:
-          name: Install Serverless CLI and dependencies
-          command: |
-            sudo npm i -g serverless
-            npm install
+      steps:
+        - checkout
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-
+        # Download and cache dependencies
+        - restore_cache:
+            keys:
+              - v1-dependencies-{{ checksum "requirements.txt" }}
+              # fallback to using the latest cache if no exact match is found
+              - v1-dependencies-
 
-      - run:
-          name: Invoke to update gallery
-          command: sls invoke -f s3gallery_maker -s prod
+        - run:
+            name: install dependencies
+            command: |
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install -r requirements.txt
+
+        - save_cache:
+            paths:
+              - ./venv
+            key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+        - run:
+            name: run application
+            command: |
+              . venv/bin/activate
+              python -m src.handler
 
 workflows:
   version: 2
   full_run:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+      - test
+#      - deploy:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              only: master
       - run:
           requires:
-            - deploy
+            - build
           filters:
             branches:
               only: master

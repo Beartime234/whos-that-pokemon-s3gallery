@@ -29,23 +29,21 @@ def multi_download_all_pokemon_img() -> None:
 
     # create a process per instance
     for i in range(1, config["max_pokemon_id"] + 1):
-        download_img_from_pokemon_assets(i)
-    #     # create a pipe for communication
-    #     parent_conn, child_conn = Pipe()
-    #     parent_connections.append(parent_conn)
-    #
-    #     # create the process, pass instance and connection
-    #     process = Process(target=multi_download_img_from_pokemon_assets, args=(i, child_conn))
-    #     processes.append(process)
-    #
-    # # start all processes
-    # for process in processes:
-    #     process.start()
-    #     sleep(3)
-    #
-    # # make sure that all processes have finished
-    # for process in processes:
-    #     process.join()
+        # create a pipe for communication
+        parent_conn, child_conn = Pipe()
+        parent_connections.append(parent_conn)
+
+        # create the process, pass instance and connection
+        process = Process(target=multi_download_img_from_pokemon_assets, args=(i, child_conn))
+        processes.append(process)
+
+    # start all processes
+    for process in processes:
+        process.start()
+
+    # make sure that all processes have finished
+    for process in processes:
+        process.join()
 
 
 def multi_download_img_from_pokemon_assets(pokemon_id: int, conn):

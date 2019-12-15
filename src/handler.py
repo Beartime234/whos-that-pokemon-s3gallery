@@ -10,3 +10,7 @@ def run(event, context):
     logging.debug(f"Running whos_that_pokemon_s3gallery: {current_date}")
     src.pokemon_assets.multi_download_all_pokemon_img()
     logging.debug(f"Successfully completed; {current_date}")
+
+
+if __name__ == '__main__':
+    run({}, {})
