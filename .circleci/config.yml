@@ -88,6 +88,37 @@ jobs:
       - run:
           name: Invoke to update gallery
           command: sls invoke -f s3gallery_maker -s prod
+  run:
+    docker:
+      - image: circleci/node:8.10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            npm i -g serverless
+            npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-
+
+      - run:
+          name: Invoke to update gallery
+          command: sls invoke -f s3gallery_maker -s prod
+
 workflows:
   version: 2
   build_and_deploy:
@@ -96,6 +127,13 @@ workflows:
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only: master
+      - run:
+          requires:
+            - build
+            - deploy
           filters:
             branches:
               only: master
