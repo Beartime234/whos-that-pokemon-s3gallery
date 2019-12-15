@@ -25,6 +25,8 @@ package:
 functions:
   s3gallery_maker:
     handler: src/handler.run
+    timeout: 720
+    memorySize: 2048
     events:
       - schedule: rate(90 days)
     environment:
