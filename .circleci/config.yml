@@ -56,7 +56,7 @@ jobs:
           path: test-reports
   deploy:
     docker:
-      - image: circleci/node:8.10
+      - image: nikolaik/python3.8-nodejs8
 
     working_directory: ~/repo
 
@@ -75,12 +75,6 @@ jobs:
           command: |
             sudo npm i -g serverless
             npm install
-            sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository ppa:deadsnakes/ppa
-            sudo apt update
-            sudo apt-get install python3.8
-            sudo apt-get install python3.8-venv python3.8-dev
 
       - save_cache:
           paths:
