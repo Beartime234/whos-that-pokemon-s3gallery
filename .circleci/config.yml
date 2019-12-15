@@ -2,8 +2,16 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
+
+orbs:
+  aws-cloudformation: orbss/aws-cloudformation@0.1.6
+
 jobs:
+  deploy:
+    - cloudformation/create-stack:
+        stack-name: s3-gallery
+        template-file-path: template.yml
   test:
     docker:
       # specify the version you desire here
@@ -102,7 +110,16 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - test
+      - deploy:
+          filters:
+            branches:
+              only: master
+      - test:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only: master
       - run:
           requires:
             - test

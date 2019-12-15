@@ -1,0 +1,28 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The AWS CloudFormation template for this Serverless application
+Resources:
+  GalleryBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: whos-that-pokemon-gallery
+      VersioningConfiguration:
+        Status: Enabled
+  GalleryBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: GalleryBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: PublicReadGetObject
+          Effect: Allow
+          Principal: "*"
+          Action: s3:GetObject
+          Resource:
+            Fn::Join:
+            - ''
+            - - 'arn:aws:s3:::'
+              - Ref: GalleryBucket
+              - "/*"
