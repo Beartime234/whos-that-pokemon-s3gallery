@@ -23,6 +23,8 @@ functions:
       - schedule: rate(90 days)
     envionrment:
       S3_BUCKET: ${self:custom.s3BucketName}
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
 
 resources:
   Resources:
