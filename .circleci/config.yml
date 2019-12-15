@@ -111,7 +111,7 @@ workflows:
           template-file-path: template.yml
       - test:
           requires:
-            - cloudformation/create-stack
+            - cloudformation/deploy
           filters:
             branches:
               only: master
