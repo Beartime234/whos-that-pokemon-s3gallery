@@ -4,9 +4,6 @@
 #
 version: 2.1
 
-orbs:
-  aws-cloudformation: orbss/aws-cloudformation@0.1.6
-
 jobs:
   test:
     docker:
@@ -101,7 +98,8 @@ jobs:
           command: |
             . venv/bin/activate
             python -m src.handler
-
+orbs:
+  aws-cloudformation: orbss/aws-cloudformation@0.1.6
 workflows:
   version: 2
   full_run:
