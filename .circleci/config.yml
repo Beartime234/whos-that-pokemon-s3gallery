@@ -109,6 +109,7 @@ workflows:
       - cloudformation/create-stack:
           stack-name: s3-gallery
           template-file-path: template.yml
+          aws-region: us-east-1
       - test:
           requires:
             - cloudformation/create-stack
