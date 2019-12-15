@@ -41,8 +41,10 @@ def test_download_all_pokemon_img():
     src.pokemon_assets.download_all_pokemon_img()
 
     # Checks that we downloaded the number of files = to max pokemon id
-    assert len([f for f in os.listdir(output_dir)
-                if os.path.isfile(os.path.join(f"{output_dir}", f))]) == config["max_pokemon_id"] * 2
+    # REMOVED THIS CHECK AS WE DELETE THEM AFTER CREATION
+
+    # assert len([f for f in os.listdir(output_dir)
+    #             if os.path.isfile(os.path.join(f"{output_dir}", f))]) == config["max_pokemon_id"] * 2
 
     # Removes all the pokemon downloaded
     test = os.listdir(output_dir)
