@@ -7,7 +7,7 @@ import src.s3
 import src.util
 from src import config, s3_bucket
 
-output_dir = "./img/"
+output_dir = "/tmp/img/"
 original_image_suffix = "-orig"
 silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
