@@ -52,12 +52,18 @@ def download_all_pokemon_img() -> None:
     for process in processes:
         process.join()
 
-    instances_total = 0
-    for parent_connection in parent_connections:
-        instances_total += parent_connection.recv()[0]
-
 
 def multi_download_img_from_pokemon_assets(pokemon_id: int, conn):
+    """This is a simple wrapper that takes the function and wraps it in a connection so that it can be
+    run by the multiprocessing pipe
+
+    Args:
+        pokemon_id: The pokemon's id
+        conn: The multi processing connection
+
+    Returns:
+
+    """
     download_img_from_pokemon_assets(pokemon_id)
     conn.close()
 
