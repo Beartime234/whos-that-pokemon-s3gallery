@@ -106,7 +106,7 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - cloudformation/create-stack:
+      - cloudformation/deploy:
           stack-name: s3-gallery
           template-file-path: template.yml
       - test:
