@@ -1,6 +1,7 @@
 from multiprocessing import Process, Pipe
 
 import pokepy
+import os
 
 import src.img_transform
 import src.s3
@@ -84,6 +85,10 @@ def download_img_from_pokemon_assets(pokemon_id: int):
                                      orig_pokemon_filepath)
     # Create the silhouette img
     src.img_transform.create_silhouette_of_img(orig_pokemon_filepath, bw_pokemon_filepath)
+    src.s3.upload_image_to_s3(orig_pokemon_filepath, s3_bucket)
+    os.remove(orig_pokemon_filepath)
+    src.s3.upload_image_to_s3(bw_pokemon_filepath, s3_bucket)
+    os.remove(bw_pokemon_filepath)
 
 
 def get_pokemon_name_from_id(pokemon_id: int) -> str:
@@ -129,7 +134,7 @@ def pad_pokemon_id(pokemon_id: int) -> str:
 
 
 def get_pokemon_orig_filename(pokemon_name: str) -> str:
-    """Generates the pokemon orig path
+    """Generates the pokemon orig file_path
 
     Args:
         pokemon_name: The pokemon's name
@@ -138,12 +143,12 @@ def get_pokemon_orig_filename(pokemon_name: str) -> str:
 
 
 def get_pokemon_silhouette_filepath(pokemon_name: str) -> str:
-    """Generates the pokemon silhouette path
+    """Generates the pokemon silhouette file_path
 
     Args:
         pokemon_name: The pokemon's name
 
     Returns:
-        A string with the pokemon's path
+        A string with the pokemon's file_path
     """
     return f"{output_dir}{pokemon_name}{silhouette_image_suffix}{saved_file_type}"
