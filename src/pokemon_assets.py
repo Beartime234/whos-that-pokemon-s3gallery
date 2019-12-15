@@ -1,8 +1,7 @@
-from time import sleep
-from multiprocessing import Process, Pipe
+import os
+from multiprocessing import Pool
 
 import pokepy
-import os
 
 import src.img_transform
 import src.s3
@@ -16,52 +15,12 @@ saved_file_type = ".png"
 
 
 def multi_download_all_pokemon_img() -> None:
-    """Downloads all pokemon from the pokemon assets website
-
-    Returns:
-        None
-    """
-    # create a list to keep all processes
-    processes = []
-
-    # create a list to keep connections
-    parent_connections = []
-
-    # create a process per instance
-    for i in range(1, config["max_pokemon_id"] + 1):
-        # create a pipe for communication
-        parent_conn, child_conn = Pipe()
-        parent_connections.append(parent_conn)
-
-        # create the process, pass instance and connection
-        process = Process(target=multi_download_img_from_pokemon_assets, args=(i, child_conn))
-        processes.append(process)
-
-    # start all processes
-    for process in processes:
-        process.start()
-
-    # make sure that all processes have finished
-    for process in processes:
-        process.join()
+    src.util.create_directory(output_dir)  # create a list to keep all processes
+    pool = Pool()  # Creates a multiprocessing pool based on CPU's you have	    processes = []
+    pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
 
-def multi_download_img_from_pokemon_assets(pokemon_id: int, conn):
-    """This is a simple wrapper that takes the function and wraps it in a connection so that it can be
-    run by the multiprocessing pipe
-
-    Args:
-        pokemon_id: The pokemon's id
-        conn: The multi processing connection
-
-    Returns:
-
-    """
-    download_img_from_pokemon_assets(pokemon_id)
-    conn.close()
-
-
-async def download_img_from_pokemon_assets(pokemon_id: int):
+def download_img_from_pokemon_assets(pokemon_id: int):
     """Downloads the pokemon's image from the pokemon assets database. It will also create bw versions.
 
     Args:
