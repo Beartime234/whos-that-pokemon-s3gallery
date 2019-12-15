@@ -37,7 +37,7 @@ resources:
       Properties:
         PolicyDocument:
           Id: GalleryBucketPolicy
-          Version: 2012-10-17
+          Version: 2010-09-09
           Statement:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
