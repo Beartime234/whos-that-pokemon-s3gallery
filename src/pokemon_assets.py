@@ -63,7 +63,7 @@ def multi_download_img_from_pokemon_assets(pokemon_id: int, conn):
     conn.close()
 
 
-def download_img_from_pokemon_assets(pokemon_id: int):
+async def download_img_from_pokemon_assets(pokemon_id: int):
     """Downloads the pokemon's image from the pokemon assets database. It will also create bw versions.
 
     Args:

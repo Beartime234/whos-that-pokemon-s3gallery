@@ -25,7 +25,7 @@ def test_get_pokemon_silhouette_filename():
     assert src.pokemon_assets.get_pokemon_silhouette_filepath("bulbasaur") == f"{output_dir}bulbasaur{silhouette_image_suffix}{saved_file_type}"
 
 
-def test_get_pokemon_img():
+def test_download_img_from_pokemon_assets():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     src.pokemon_assets.download_img_from_pokemon_assets(1)
