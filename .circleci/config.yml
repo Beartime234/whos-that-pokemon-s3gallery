@@ -8,10 +8,6 @@ orbs:
   aws-cloudformation: orbss/aws-cloudformation@0.1.6
 
 jobs:
-  deploy:
-    - cloudformation/create-stack:
-        stack-name: s3-gallery
-        template-file-path: template.yml
   test:
     docker:
       # specify the version you desire here
@@ -110,13 +106,12 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - deploy:
-          filters:
-            branches:
-              only: master
+      - cloudformation/create-stack:
+          stack-name: s3-gallery
+          template-file-path: template.yml
       - test:
           requires:
-            - deploy
+            - cloudformation/create-stack
           filters:
             branches:
               only: master
