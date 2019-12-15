@@ -28,6 +28,6 @@ resources:
     GalleryBucket:
       Type: AWS::S3::Bucket
       Properties:
-        Name: ${self:custom.s3BucketName}
+        BucketName: ${self:custom.s3BucketName}
         VersioningConfiguration:
           Status: Enabled
