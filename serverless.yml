@@ -32,3 +32,20 @@ resources:
         BucketName: ${self:custom.s3BucketName}
         VersioningConfiguration:
           Status: Enabled
+    GalleryBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: GalleryBucketPolicy
+          Version: 2012-10-17
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref GalleryBucket
+                  - /*
+        Bucket: !Ref GalleryBucket

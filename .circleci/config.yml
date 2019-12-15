@@ -83,7 +83,7 @@ jobs:
 
       - run:
           name: Deploy application
-          command: sls deploy
+          command: sls deploy  -s prod
 workflows:
   version: 2
   build_and_deploy:
