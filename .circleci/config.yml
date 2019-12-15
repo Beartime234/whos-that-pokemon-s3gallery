@@ -75,7 +75,7 @@ jobs:
           command: |
             sudo npm i -g serverless
             npm install
-            apt-get update || : && apt-get install python -y
+            sudo apt-get install python3.8
 
       - save_cache:
           paths:
