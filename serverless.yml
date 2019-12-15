@@ -17,6 +17,8 @@ provider:
   region: us-east-1
 
 package:
+  exclude:
+    - "*/**"
   include:
     - src/**
 

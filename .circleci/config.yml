@@ -85,9 +85,6 @@ jobs:
           name: Deploy application
           command: sls deploy  -s prod
 
-      - run:
-          name: Invoke to update gallery
-          command: sls invoke -f s3gallery_maker -s prod
   run:
     docker:
       - image: circleci/node:8.10
