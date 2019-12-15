@@ -1,3 +1,4 @@
+from time import sleep
 from multiprocessing import Process, Pipe
 
 import pokepy
@@ -48,6 +49,7 @@ def download_all_pokemon_img() -> None:
     # start all processes
     for process in processes:
         process.start()
+        sleep(0.5)
 
     # make sure that all processes have finished
     for process in processes:
