@@ -21,4 +21,13 @@ def upload_folder_to_s3(path: str, bucket_name: str) -> None:
 
 
 def upload_image_to_s3(file_path, bucket_name: str) -> None:
-    s3_client.upload_file(file_path, bucket_name, file_path)
+    """
+
+    Args:
+        file_path:
+        bucket_name:
+
+    Returns:
+
+    """
+    s3_client.upload_file(file_path, bucket_name, file_path.split("/")[-1])
