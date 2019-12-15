@@ -1,4 +1,7 @@
+import errno
 import os
+import signal
+from functools import wraps
 
 import requests
 
@@ -28,3 +31,34 @@ def create_directory(directory: str) -> None:
     """
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+
+def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
+    """Will timeout a function if it takes too long
+
+    References:
+        https://stackoverflow.com/questions/2281850/timeout-function-if-it-takes-too-long-to-finish
+
+    Args:
+        seconds: How long it should timeout
+        error_message: The error message it should produce
+
+    Returns:
+
+    """
+    def decorator(func):
+        def _handle_timeout(signum, frame):
+            raise TimeoutError(error_message)
+
+        def wrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, _handle_timeout)
+            signal.alarm(seconds)
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                signal.alarm(0)
+            return result
+
+        return wraps(func)(wrapper)
+
+    return decorator

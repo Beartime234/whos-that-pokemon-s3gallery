@@ -1,4 +1,4 @@
-from multiprocessing import Pool
+from multiprocessing import Process, Pipe
 
 import pokepy
 
@@ -28,9 +28,38 @@ def download_all_pokemon_img() -> None:
     Returns:
         None
     """
-    src.util.create_directory(output_dir)
-    pool = Pool()  # Creates a multiprocessing pool based on CPU's you have
-    pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
+    # create a list to keep all processes
+    processes = []
+
+    # create a list to keep connections
+    parent_connections = []
+
+    # create a process per instance
+    for i in range(1, config["max_pokemon_id"] + 1):
+        # create a pipe for communication
+        parent_conn, child_conn = Pipe()
+        parent_connections.append(parent_conn)
+
+        # create the process, pass instance and connection
+        process = Process(target=multi_download_img_from_pokemon_assets, args=(i, child_conn))
+        processes.append(process)
+
+    # start all processes
+    for process in processes:
+        process.start()
+
+    # make sure that all processes have finished
+    for process in processes:
+        process.join()
+
+    instances_total = 0
+    for parent_connection in parent_connections:
+        instances_total += parent_connection.recv()[0]
+
+
+def multi_download_img_from_pokemon_assets(pokemon_id: int, conn):
+    download_img_from_pokemon_assets(pokemon_id)
+    conn.close()
 
 
 def download_img_from_pokemon_assets(pokemon_id: int):
