@@ -9,7 +9,7 @@ custom:
   s3BucketName: whos-that-pokemon-gallery
   pythonRequirements:
     layer: true
-    dockerizePip: false
+    dockerizePip: true
 
 provider:
   name: aws
