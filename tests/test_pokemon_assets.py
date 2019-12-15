@@ -36,7 +36,7 @@ def test_get_pokemon_img():
 #     if not os.path.exists(output_dir):
 #         os.makedirs(output_dir)
 #
-#     src.pokemon_assets.download_all_pokemon_img()
+#     src.pokemon_assets.multi_download_all_pokemon_img()
 
     # Checks that we downloaded the number of files = to max pokemon id
     # REMOVED THIS CHECK AS WE DELETE THEM AFTER CREATION
