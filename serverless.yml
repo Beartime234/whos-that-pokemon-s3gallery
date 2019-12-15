@@ -16,12 +16,16 @@ provider:
   runtime: python3.8
   region: us-east-1
 
+package:
+  include:
+    - src/**
+
 functions:
   s3gallery_maker:
-    handler: whos_that_pokemon_s3gallery/handler.run
+    handler: src/handler.run
     events:
       - schedule: rate(90 days)
-    envionrment:
+    environment:
       S3_BUCKET: ${self:custom.s3BucketName}
     layers:
       - {Ref: PythonRequirementsLambdaLayer}

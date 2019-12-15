@@ -2,10 +2,10 @@ from multiprocessing import Pool
 
 import pokepy
 
-import whos_that_pokemon_s3gallery.img_transform
-import whos_that_pokemon_s3gallery.s3
-import whos_that_pokemon_s3gallery.util
-from whos_that_pokemon_s3gallery import config, s3_bucket
+import src.img_transform
+import src.s3
+import src.util
+from src import config, s3_bucket
 
 output_dir = "./img/"
 original_image_suffix = "-orig"
@@ -19,7 +19,7 @@ def upload_all_pokemon_img() -> None:
     Returns:
         None
     """
-    whos_that_pokemon_s3gallery.s3.upload_folder_to_s3(output_dir, s3_bucket)
+    src.s3.upload_folder_to_s3(output_dir, s3_bucket)
 
 
 def download_all_pokemon_img() -> None:
@@ -28,7 +28,7 @@ def download_all_pokemon_img() -> None:
     Returns:
         None
     """
-    whos_that_pokemon_s3gallery.util.create_directory(output_dir)
+    src.util.create_directory(output_dir)
     pool = Pool()  # Creates a multiprocessing pool based on CPU's you have
     pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
@@ -45,10 +45,10 @@ def download_img_from_pokemon_assets(pokemon_id: int):
     bw_pokemon_filepath = get_pokemon_silhouette_filepath(pokemon_name)
 
     # Download the image
-    whos_that_pokemon_s3gallery.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
-                                                             orig_pokemon_filepath)
+    src.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
+                                     orig_pokemon_filepath)
     # Create the silhouette img
-    whos_that_pokemon_s3gallery.img_transform.create_silhouette_of_img(orig_pokemon_filepath, bw_pokemon_filepath)
+    src.img_transform.create_silhouette_of_img(orig_pokemon_filepath, bw_pokemon_filepath)
 
 
 def get_pokemon_name_from_id(pokemon_id: int) -> str:
