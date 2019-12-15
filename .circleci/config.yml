@@ -54,37 +54,6 @@ jobs:
 
       - store_artifacts:
           path: test-reports
-#  deploy:
-#    docker:
-#      - image: nikolaik/python-nodejs:python3.8-nodejs8
-#
-#    working_directory: ~/repo
-#
-#    steps:
-#      - checkout
-#
-#      # Download and cache dependencies
-#      - restore_cache:
-#          keys:
-#            - v1-dependencies-
-#            # fallback to using the latest cache if no exact match is found
-#            - v1-dependencies-
-#
-#      - run:
-#          name: Install Serverless CLI and dependencies
-#          command: |
-#            npm i -g serverless
-#            npm install
-#
-#      - save_cache:
-#          paths:
-#            - node_modules
-#          key: v1-dependencies-
-#
-#      - run:
-#          name: Deploy application
-#          command: sls deploy  -s prod
-
   run:
     docker:
       # specify the version you desire here
@@ -96,38 +65,38 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-      working_directory: ~/repo
+    working_directory: ~/repo
 
-      environment:
-        S3_BUCKET: whos-that-pokemon-gallery
+    environment:
+      S3_BUCKET: whos-that-pokemon-gallery
 
-      steps:
-        - checkout
+    steps:
+      - checkout
 
-        # Download and cache dependencies
-        - restore_cache:
-            keys:
-              - v1-dependencies-{{ checksum "requirements.txt" }}
-              # fallback to using the latest cache if no exact match is found
-              - v1-dependencies-
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-        - run:
-            name: install dependencies
-            command: |
-              python3 -m venv venv
-              . venv/bin/activate
-              pip install -r requirements.txt
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
 
-        - save_cache:
-            paths:
-              - ./venv
-            key: v1-dependencies-{{ checksum "requirements.txt" }}
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-        - run:
-            name: run application
-            command: |
-              . venv/bin/activate
-              python -m src.handler
+      - run:
+          name: run application
+          command: |
+            . venv/bin/activate
+            python -m src.handler
 
 workflows:
   version: 2
