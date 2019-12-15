@@ -35,17 +35,17 @@ resources:
     GalleryBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
+        Bucket:
+          Ref: GalleryBucket
         PolicyDocument:
-          Id: GalleryBucketPolicy
-          Version: 2010-09-09
+          Version: '2012-10-17'
           Statement:
-            - Sid: PublicReadForGetBucketObjects
-              Effect: Allow
-              Principal: '*'
-              Action: 's3:GetObject'
-              Resource: !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref GalleryBucket
-                  - /*
-        Bucket: !Ref GalleryBucket
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref GalleryBucket
+                - /*
