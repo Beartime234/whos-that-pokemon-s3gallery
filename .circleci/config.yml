@@ -129,7 +129,6 @@ workflows:
               only: master
       - run:
           requires:
-            - build
             - deploy
           filters:
             branches:

@@ -49,7 +49,7 @@ def download_all_pokemon_img() -> None:
     # start all processes
     for process in processes:
         process.start()
-        sleep(0.5)
+        sleep(1)
 
     # make sure that all processes have finished
     for process in processes:
