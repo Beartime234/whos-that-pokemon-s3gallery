@@ -56,7 +56,7 @@ jobs:
           path: test-reports
   deploy:
     docker:
-      - image: nikolaik/python3.8-nodejs8
+      - image: nikolaik/python-nodejs:python3.8-nodejs8
 
     working_directory: ~/repo
 
