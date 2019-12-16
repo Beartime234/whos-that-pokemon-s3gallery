@@ -29,6 +29,7 @@ jobs:
 
     environment:
       S3_BUCKET: whos-that-pokemon-gallery
+      DYNAMO_TABLE: PokemonGalleryTable
 
     steps:
       - checkout
@@ -79,6 +80,7 @@ jobs:
 
     environment:
       S3_BUCKET: whos-that-pokemon-gallery
+      DYNAMO_TABLE: PokemonGalleryTable
 
     steps:
       - checkout

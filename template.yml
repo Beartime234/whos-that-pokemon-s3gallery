@@ -26,3 +26,14 @@ Resources:
             - - 'arn:aws:s3:::'
               - Ref: GalleryBucket
               - "/*"
+  GalleryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "PokedexID"
+          AttributeType: "N"
+      KeySchema:
+        - AttributeName: "PokedexID"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "PokemonGalleryTable"

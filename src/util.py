@@ -11,7 +11,7 @@ def download_image_from_url(url: str, path: str) -> None:
     Directory defaults to ./
 
     Args:
-        url: The url to download the image from
+        url: The s3_url to download the image from
         path: The name of the file to save as
     """
     r = requests.get(url)
@@ -62,3 +62,15 @@ def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
         return wraps(func)(wrapper)
 
     return decorator
+
+
+def get_filename(file_path):
+    """This gets just the filename of a filepath
+
+    Args:
+        file_path: The file path you wish to get the filename from
+
+    Returns:
+
+    """
+    return file_path.split("/")[-1]

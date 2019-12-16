@@ -1,17 +1,20 @@
 import os
 from multiprocessing import Pool
+from typing import Tuple
 
 import pokepy
 
 import src.img_transform
 import src.s3
 import src.util
+import src.dynamo
 from src import config, s3_bucket
 
 output_dir = "/tmp/img/"
 original_image_suffix = "-orig"
 silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
+s3_url = f"https://{s3_bucket}.s3.amazonaws.com/"
 
 
 def multi_download_all_pokemon_img() -> None:
@@ -28,18 +31,20 @@ def download_img_from_pokemon_assets(pokemon_id: int):
     """
     pokemon_name = get_pokemon_name_from_id(pokemon_id)
 
-    orig_pokemon_filepath = get_pokemon_orig_filename(pokemon_name)
-    bw_pokemon_filepath = get_pokemon_silhouette_filepath(pokemon_name)
+    orig_pokemon_filepath, orig_pokemon_filename = get_pokemon_orig_fileinfo(pokemon_name)
+    bw_pokemon_filepath, bw_pokemon_filename = get_pokemon_silhouette_fileinfo(pokemon_name)
 
     # Download the image
     src.util.download_image_from_url(get_pokemon_assets_image_url(pokemon_id),
                                      orig_pokemon_filepath)
     # Create the silhouette img
     src.img_transform.create_silhouette_of_img(orig_pokemon_filepath, bw_pokemon_filepath)
-    src.s3.upload_image_to_s3(orig_pokemon_filepath, s3_bucket)
+    src.s3.upload_image_to_s3(orig_pokemon_filepath, s3_bucket, orig_pokemon_filename)
     os.remove(orig_pokemon_filepath)
-    src.s3.upload_image_to_s3(bw_pokemon_filepath, s3_bucket)
+    src.s3.upload_image_to_s3(bw_pokemon_filepath, s3_bucket, bw_pokemon_filename)
     os.remove(bw_pokemon_filepath)
+    src.dynamo.put_pokemon_data(pokemon_id, pokemon_name, get_pokemon_image_url(orig_pokemon_filename),
+                                get_pokemon_image_url(bw_pokemon_filename))  # Finally load into databse
 
 
 def get_pokemon_name_from_id(pokemon_id: int) -> str:
@@ -56,13 +61,13 @@ def get_pokemon_name_from_id(pokemon_id: int) -> str:
 
 
 def get_pokemon_assets_image_url(pokemon_id: int) -> str:
-    """Generates the pokemon image url
+    """Generates the pokemon image s3_url
 
     Args:
         pokemon_id: The pokemon's id
 
     Returns:
-        The full pokemon assets url
+        The full pokemon assets s3_url
     """
     return f"{config['pokemon_assets_url']}{pad_pokemon_id(pokemon_id)}.png"
 
@@ -84,22 +89,39 @@ def pad_pokemon_id(pokemon_id: int) -> str:
     return f"{pokemon_id:03}"
 
 
-def get_pokemon_orig_filename(pokemon_name: str) -> str:
+def get_pokemon_orig_fileinfo(pokemon_name: str) -> Tuple[str, str]:
     """Generates the pokemon orig file_path
 
     Args:
         pokemon_name: The pokemon's name
+
+    Returns:
+        filepath then filename
     """
-    return f"{output_dir}{pokemon_name}{original_image_suffix}{saved_file_type}"
+    filename = f"{pokemon_name}{original_image_suffix}{saved_file_type}"
+    return f"{output_dir}orig/{filename}", filename
 
 
-def get_pokemon_silhouette_filepath(pokemon_name: str) -> str:
+def get_pokemon_silhouette_fileinfo(pokemon_name: str) -> Tuple[str, str]:
     """Generates the pokemon silhouette file_path
 
     Args:
         pokemon_name: The pokemon's name
 
     Returns:
-        A string with the pokemon's file_path
+        filepath then filename
     """
-    return f"{output_dir}{pokemon_name}{silhouette_image_suffix}{saved_file_type}"
+    filename = f"{pokemon_name}{silhouette_image_suffix}{saved_file_type}"
+    return f"{output_dir}bw/{filename}", filename
+
+
+def get_pokemon_image_url(file_name) -> str:
+    """Gets the full image url for something being put in the S3 bucket
+
+    Args:
+        file_name: The files name
+
+    Returns:
+
+    """
+    return f"{s3_url}{file_name}"

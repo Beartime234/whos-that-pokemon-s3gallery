@@ -18,7 +18,7 @@ def test_get_pokemon_image_url():
 
 
 def test_get_pokemon_orig_filename():
-    assert src.pokemon_assets.get_pokemon_orig_filename("bulbasaur") == f"{output_dir}bulbasaur{original_image_suffix}{saved_file_type}"
+    assert src.pokemon_assets.get_pokemon_orig_fileinfo("bulbasaur") == f"{output_dir}bulbasaur{original_image_suffix}{saved_file_type}"
 
 
 def test_get_pokemon_silhouette_filename():

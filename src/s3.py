@@ -20,14 +20,15 @@ def upload_folder_to_s3(path: str, bucket_name: str) -> None:
             s3_client.upload_file(os.path.join(root, file), bucket_name, file)
 
 
-def upload_image_to_s3(file_path, bucket_name: str) -> None:
+def upload_image_to_s3(file_path: str, bucket_name: str, output_file_path: str) -> None:
     """
 
     Args:
         file_path:
         bucket_name:
+        output_file_path:
 
     Returns:
 
     """
-    s3_client.upload_file(file_path, bucket_name, file_path.split("/")[-1], ExtraArgs={"ContentType": "image/png"})
+    s3_client.upload_file(file_path, bucket_name, output_file_path, ExtraArgs={"ContentType": "image/png"})

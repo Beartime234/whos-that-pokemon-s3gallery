@@ -5,6 +5,7 @@ import yaml
 module_dir = os.path.dirname(__file__)
 
 s3_bucket = os.environ["S3_BUCKET"]
+dynamo_table = os.environ["DYNAMO_TABLE"]
 config = {}
 
 
