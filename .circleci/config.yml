@@ -112,8 +112,7 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - deploy:
-          context: aws
+      - deploy
       - test:
           requires:
             - deploy
