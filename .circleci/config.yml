@@ -5,9 +5,15 @@
 version: 2.1
 
 orbs:
-  cloudformation: orbss/aws-cloudformation@0.1.6
+  aws-cli: circleci/aws-cli@0.1.18
 
 jobs:
+  deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run: echo "Hi"
   test:
     docker:
       # specify the version you desire here
@@ -106,12 +112,11 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - cloudformation/deploy:
-          stack-name: s3-gallery
-          template-file-path: template.yml
+      - deploy:
+          context: aws
       - test:
           requires:
-            - cloudformation/deploy
+            - deploy
           filters:
             branches:
               only: master
