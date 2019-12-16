@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup
-      - run: aws cloudformation deploy --template-file template.yml --stack-name s3-gallery
+      - run: aws cloudformation deploy --template-file template.yml --stack-name s3-gallery  || true
   test:
     docker:
       # specify the version you desire here
