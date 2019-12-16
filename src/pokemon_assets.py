@@ -14,11 +14,16 @@ output_dir = "/tmp/img/"
 original_image_suffix = "-orig"
 silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
+original_image_s3_path = "orig/"
+silhouette_image_s3_path = "bw/"
 s3_url = f"https://{s3_bucket}.s3.amazonaws.com/"
 
 
 def multi_download_all_pokemon_img() -> None:
-    src.util.create_directory(output_dir)  # create a list to keep all processes
+    src.util.create_directory(output_dir)
+    src.util.create_directory(output_dir + original_image_s3_path)
+    src.util.create_directory(output_dir + silhouette_image_s3_path)
+
     pool = Pool()  # Creates a multiprocessing pool based on CPU's you have	    processes = []
     pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
