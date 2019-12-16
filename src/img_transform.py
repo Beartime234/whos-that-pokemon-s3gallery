@@ -22,7 +22,7 @@ def create_silhouette_of_img(input_image_path: str, output_image_path: str) -> N
     for x in range(width):
         for y in range(height):
             current_color = picture.getpixel((x, y))
-            if current_color[3] == 255:  # If it's transparent color then we skip
+            if current_color[3] > 0:  # If it's transparent color then we skip
                 # If its not transparent then we change the color to black
                 # to create a sort of silhouette image
                 picture.putpixel((x, y), black_color)
