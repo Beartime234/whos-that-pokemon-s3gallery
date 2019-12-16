@@ -16,11 +16,11 @@ def test_get_pokemon_image_url():
 
 
 def test_get_pokemon_orig_fileinfo():
-    assert src.pokemon_assets.get_pokemon_orig_fileinfo("bulbasaur") == f"{output_dir}{original_image_s3_path}bulbasaur{original_image_suffix}{saved_file_type}", f"bulbasaur{original_image_suffix}{saved_file_type}"
+    assert src.pokemon_assets.get_pokemon_orig_fileinfo("bulbasaur") == (f"{output_dir}{original_image_s3_path}bulbasaur{original_image_suffix}{saved_file_type}", f"bulbasaur{original_image_suffix}{saved_file_type}")
 
 
 def test_get_pokemon_silhouette_fileinfo():
-    assert src.pokemon_assets.get_pokemon_silhouette_fileinfo("bulbasaur") == f"{output_dir}{silhouette_image_s3_path}bulbasaur{silhouette_image_suffix}{saved_file_type}", f"bulbasaur{silhouette_image_suffix}{saved_file_type}"
+    assert src.pokemon_assets.get_pokemon_silhouette_fileinfo("bulbasaur") == (f"{output_dir}{silhouette_image_s3_path}bulbasaur{silhouette_image_suffix}{saved_file_type}", f"bulbasaur{silhouette_image_suffix}{saved_file_type}")
 
 
 def test_download_img_from_pokemon_assets():
@@ -31,6 +31,8 @@ def test_download_img_from_pokemon_assets():
     if not os.path.exists(output_dir + silhouette_image_s3_path):
         os.makedirs(output_dir + silhouette_image_s3_path)
     src.pokemon_assets.download_img_from_pokemon_assets(1)
+    os.removedirs(output_dir + original_image_s3_path)
+    os.removedirs(output_dir + silhouette_image_s3_path)
     os.removedirs(output_dir)
 
 
