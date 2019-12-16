@@ -30,4 +30,4 @@ def upload_image_to_s3(file_path, bucket_name: str) -> None:
     Returns:
 
     """
-    s3_client.upload_file(file_path, bucket_name, file_path.split("/")[-1])
+    s3_client.upload_file(file_path, bucket_name, file_path.split("/")[-1], ExtraArgs={"ContentType": "image/png"})
