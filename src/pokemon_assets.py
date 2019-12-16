@@ -52,7 +52,7 @@ def get_pokemon_name_from_id(pokemon_id: int) -> str:
         The pokemon's name as a string
     """
     pokemon_name = pokepy.V2Client().get_pokemon(pokemon_id).name
-    return pokemon_name.split(':')[0]  # This gets everything before the first hyphen as some of them
+    return pokemon_name.split('-')[0]  # This gets everything before the first hyphen as some of them
 
 
 def get_pokemon_assets_image_url(pokemon_id: int) -> str:

@@ -47,3 +47,4 @@ def test_download_img_from_pokemon_assets():
 def test_get_pokemon_name_from_id():
     assert src.pokemon_assets.get_pokemon_name_from_id(1) == "bulbasaur"
     assert src.pokemon_assets.get_pokemon_name_from_id(700) == "sylveon"
+    assert src.pokemon_assets.get_pokemon_name_from_id(550) == "basculin"
