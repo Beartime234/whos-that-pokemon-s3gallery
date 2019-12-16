@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import src.pokemon_assets
 from src.pokemon_assets import output_dir, saved_file_type, silhouette_image_suffix, original_image_suffix, original_image_s3_path, silhouette_image_s3_path
@@ -31,9 +32,7 @@ def test_download_img_from_pokemon_assets():
     if not os.path.exists(output_dir + silhouette_image_s3_path):
         os.makedirs(output_dir + silhouette_image_s3_path)
     src.pokemon_assets.download_img_from_pokemon_assets(1)
-    os.removedirs(output_dir + original_image_s3_path)
-    os.removedirs(output_dir + silhouette_image_s3_path)
-    os.removedirs(output_dir)
+    shutil.rmtree(output_dir)
 
 
 # def test_download_all_pokemon_img():
