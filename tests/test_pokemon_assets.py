@@ -1,5 +1,6 @@
 import os
 import shutil
+from typing import Tuple
 
 import src.pokemon_assets
 from src.pokemon_assets import output_dir, saved_file_type, silhouette_image_suffix, original_image_suffix, original_image_s3_path, silhouette_image_s3_path
@@ -21,8 +22,7 @@ def test_get_pokemon_orig_fileinfo():
 
 
 def test_get_pokemon_silhouette_fileinfo():
-    assert src.pokemon_assets.get_pokemon_silhouette_fileinfo("bulbasaur") == (f"{output_dir}{silhouette_image_s3_path}bulbasaur{silhouette_image_suffix}{saved_file_type}", f"bulbasaur{silhouette_image_suffix}{saved_file_type}")
-
+    assert type(src.pokemon_assets.get_pokemon_silhouette_fileinfo("bulbasaur")) == Tuple[str, str]
 
 def test_download_img_from_pokemon_assets():
     if not os.path.exists(output_dir):

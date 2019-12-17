@@ -117,7 +117,7 @@ def get_pokemon_silhouette_fileinfo(pokemon_name: str) -> Tuple[str, str]:
     Returns:
         filepath then filename
     """
-    hashed_name = hashlib.sha256(pokemon_name)
+    hashed_name = hashlib.sha256(pokemon_name.encode("utf-8"))
     filename = f"{hashed_name}{saved_file_type}"
     return f"{output_dir}bw/{filename}", filename
 
