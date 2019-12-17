@@ -1,4 +1,5 @@
 import os
+import hashlib
 from multiprocessing import Pool
 from typing import Tuple
 
@@ -116,7 +117,8 @@ def get_pokemon_silhouette_fileinfo(pokemon_name: str) -> Tuple[str, str]:
     Returns:
         filepath then filename
     """
-    filename = f"{pokemon_name}{silhouette_image_suffix}{saved_file_type}"
+    hashed_name = hashlib.sha256(pokemon_name)
+    filename = f"{hashed_name}{saved_file_type}"
     return f"{output_dir}bw/{filename}", filename
 
 
