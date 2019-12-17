@@ -4,6 +4,8 @@ import json
 import decimal
 import boto3
 
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table(dynamo_table)
 
 # Helper class to convert a DynamoDB item to JSON.
 class DecimalEncoder(json.JSONEncoder):
@@ -17,8 +19,6 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def put_pokemon_data(pokedex_id: int, pokemon_name: str, pokemon_orig_image_url: str, pokemon_bw_image_url: str):
-    dynamodb = boto3.resource("dynamodb")
-    table = dynamodb.Table(dynamo_table)
     table.put_item(
         Item={
             "PokedexID": pokedex_id,
