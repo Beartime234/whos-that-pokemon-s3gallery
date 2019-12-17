@@ -114,7 +114,10 @@ workflows:
   version: 2
   full_run:
     jobs:
-      - deploy
+      - deploy:
+          filters:
+            branches:
+              only: master
       - test:
           requires:
             - deploy

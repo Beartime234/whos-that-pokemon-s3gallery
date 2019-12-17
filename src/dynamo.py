@@ -22,8 +22,8 @@ def put_pokemon_data(pokedex_id: int, pokemon_name: str, pokemon_orig_image_url:
     table.put_item(
         Item={
             "PokedexID": pokedex_id,
-            "PokemonName": pokemon_name,
-            "PokemonOriginalImageUrl": pokemon_orig_image_url,
-            "PokemonBWImageUrl": pokemon_bw_image_url
+            "Name": pokemon_name,
+            "OriginalImageUrl": pokemon_orig_image_url,
+            "BWImageUrl": pokemon_bw_image_url
         }
     )
