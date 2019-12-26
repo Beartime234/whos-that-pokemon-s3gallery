@@ -28,7 +28,7 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      S3_BUCKET: whos-that-pokemon-gallery
+      S3_BUCKET: gallery.whosthatpokemon.xyz
       DYNAMO_TABLE: PokemonGalleryTable
 
     steps:
@@ -79,7 +79,7 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      S3_BUCKET: whos-that-pokemon-gallery
+      S3_BUCKET: gallery.whosthatpokemon.xyz
       DYNAMO_TABLE: PokemonGalleryTable
 
     steps:
