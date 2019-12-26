@@ -14,12 +14,12 @@ import src.dynamo
 from src import config, s3_bucket
 
 output_dir = "/tmp/img/"
-original_image_suffix = "-orig"
+original_image_suffix = ""
 silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
 original_image_s3_path = "orig/"
 silhouette_image_s3_path = "bw/"
-s3_url = f"https://{s3_bucket}.s3.amazonaws.com/"
+gallery_url = f"https://{s3_bucket}"
 
 
 def multi_download_all_pokemon_img() -> None:
@@ -136,4 +136,4 @@ def get_pokemon_image_url(file_name) -> str:
     Returns:
 
     """
-    return f"{s3_url}{file_name}"
+    return f"{gallery_url}{file_name}"
