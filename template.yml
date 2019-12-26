@@ -70,7 +70,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
-        IndexDocument: /
+        IndexDocument: index.html
   GalleryBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
