@@ -21,7 +21,8 @@ original_image_s3_path = "orig/"
 silhouette_image_s3_path = "bw/"
 gallery_url = f"https://{s3_bucket}/"
 
-special_pokemon_names = ['mr-mime', "ho-oh", "mime-jr", "porygon-z"]
+special_pokemon_names = ['mr-mime', "ho-oh", "mime-jr", "porygon-z", "tapu-koko", "tapu-lele", "tapu-bulu", "tapu-fini"]
+
 
 def multi_download_all_pokemon_img() -> None:
     src.util.create_directory(output_dir)
