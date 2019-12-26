@@ -69,6 +69,8 @@ Resources:
         Ref: GallerySiteName
       VersioningConfiguration:
         Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: /
   GalleryBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
