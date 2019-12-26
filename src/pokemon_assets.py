@@ -19,7 +19,7 @@ silhouette_image_suffix = "-bw"
 saved_file_type = ".png"
 original_image_s3_path = "orig/"
 silhouette_image_s3_path = "bw/"
-gallery_url = f"https://{s3_bucket}"
+gallery_url = f"https://{s3_bucket}/"
 
 
 def multi_download_all_pokemon_img() -> None:
