@@ -21,13 +21,14 @@ original_image_s3_path = "orig/"
 silhouette_image_s3_path = "bw/"
 gallery_url = f"https://{s3_bucket}/"
 
+special_pokemon_names = ['mr-mime', "ho-oh", "mime-jr", "porygon-z"]
 
 def multi_download_all_pokemon_img() -> None:
     src.util.create_directory(output_dir)
     src.util.create_directory(output_dir + original_image_s3_path)
     src.util.create_directory(output_dir + silhouette_image_s3_path)
 
-    pool = Pool()  # Creates a multiprocessing pool based on CPU's you have	    processes = []
+    pool = Pool()  # Creates a multiprocessing pool based on CPU's you have
     pool.map(download_img_from_pokemon_assets, range(1, config["max_pokemon_id"] + 1))
 
 
@@ -65,6 +66,8 @@ def get_pokemon_name_from_id(pokemon_id: int) -> str:
         The pokemon's name as a string
     """
     pokemon_name = pokepy.V2Client().get_pokemon(pokemon_id).name
+    if pokemon_name in special_pokemon_names:
+        return pokemon_name
     return pokemon_name.split('-')[0]  # This gets everything before the first hyphen as some of them
 
 
