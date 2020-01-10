@@ -21,7 +21,19 @@ original_image_s3_path = "orig/"
 silhouette_image_s3_path = "bw/"
 gallery_url = f"https://{s3_bucket}/"
 
-special_pokemon_names = ['mr-mime', "ho-oh", "mime-jr", "porygon-z", "tapu-koko", "tapu-lele", "tapu-bulu", "tapu-fini"]
+special_pokemon_names = ['mr-mime', "ho-oh", "mime-jr", "porygon-z", "tapu-koko", "tapu-lele", "tapu-bulu", "tapu-fini",
+                         "type-null"]
+
+special_pokemon_names = [
+    {"mr-mime": "mr.mime"},
+    {"ho-oh": "ho-oh"},
+    {"mime-jr": "mime jr"},
+    {"porygon-z": "porygon-z"},
+    {"tapu-koko": "tapu-koko"},
+    {"tapu-lele":  "tapu-lele"},
+    {"tapu-fini": "tapu-fini"},
+    {"type-null": "type: null"}
+]
 
 
 def multi_download_all_pokemon_img() -> None:
@@ -67,8 +79,9 @@ def get_pokemon_name_from_id(pokemon_id: int) -> str:
         The pokemon's name as a string
     """
     pokemon_name = pokepy.V2Client().get_pokemon(pokemon_id).name
-    if pokemon_name in special_pokemon_names:
-        return pokemon_name
+    for special_pokemon_name in special_pokemon_names:
+        if pokemon_name in special_pokemon_name:
+            return special_pokemon_name[pokemon_name]
     return pokemon_name.split('-')[0]  # This gets everything before the first hyphen as some of them
 
 
